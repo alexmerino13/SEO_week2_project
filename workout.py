@@ -33,8 +33,36 @@ def get_categories():
     categories = {}
 
     for item in r:
-        categories[item['name'].lower()] = item['id']
+        categories[item['name'].lower()] = str(item['id'])
     return categories
 
+#gets a list of exercises by muscle group id and prints it to console
+def get_exercises(id):
+    r = requests.get(BASE_URL +'exercise/?muscles=' + id + '&language=2').json()
+    print(r)
 
-print(get_categories())
+#recieves and validates user input: prints options to console, handles response
+#by making sure it is lowercase and there is no whitespace. then it makes sure 
+#the response can be found in the options. if not, loops through until a correct
+#response is given
+def get_input(ids):
+    keys = list(ids.keys())
+    print("What do you want to target? Below is a list of options")
+    
+    for key in keys:
+        print(key, end=" ")
+    print("")
+    
+    response = input().strip().lower()
+
+    try:
+        return response
+    except:
+        print("Invalid input: input not an option.")
+        return get_input(ids)
+
+def driver():
+    ids = get_categories()
+    input = get_input(ids)
+    get_exercises(input)
+driver()
