@@ -77,5 +77,6 @@ category = exercise["category"]["name"]
 
 print("name: " + name + " category: " + category)
 
-category_request = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers)
-print(category_request.json())
+# category_request = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers)
+# print(category_request.json())
+# new line of code
