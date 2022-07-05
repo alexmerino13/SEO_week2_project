@@ -66,3 +66,16 @@ def driver():
     input = get_input(ids)
     get_exercises(input)
 driver()
+
+
+# Alex's code test
+r = requests.get(BASE_URL + 'exerciseinfo/345/', headers=headers)
+
+exercise = r.json()
+name = exercise["name"] 
+category = exercise["category"]["name"]
+
+print("name: " + name + " category: " + category)
+
+category_request = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers)
+print(category_request.json())
