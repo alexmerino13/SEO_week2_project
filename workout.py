@@ -32,19 +32,7 @@ def getInput():
             print("Invalid input. Please try again.")
     return (days_per_week, workout_length)
 
-#language 2 restricts it to english
-#mass req for random exercises, returns descriptions
-#returns an array of descriptions
-def mass_req():
-    r = requests.get(BASE_URL + 'exercise/?language=2', headers=headers).json()
-    results = r['results']
 
-    descriptions = []
-
-    for workout in results:
-        descriptions.append(workout['description'])
-
-    return descriptions
 
 # receives: a muscle type (UPPER/LOWER/ALL)
 # returns: a dictionary of categories in the workout type (name:id)
@@ -70,6 +58,7 @@ def get_categories(muscle_type):
 
 # receives: a muscle group id
 # returns: a dictionary of exercises in the muscle group (name:id)
+#probably don't need this anymore?
 def get_exercises(id):
 
     r = requests.get(BASE_URL +'exercise/?category=' + str(id) + '&language=2', headers=headers).json()['results']
@@ -124,6 +113,14 @@ def choose_exercise(ids):
             input_flag = True
         else:
             print("Invalid input. Please try again.")
+        
+        #making sure it is a number
+        try:
+            int(response)
+        except:
+            print("Invalid input. Please use one of the numbers displayed")
+
+        #TODO:also we should probably make sure the chosen id hasn't been chosen before
     print("")
     return response
 
@@ -193,5 +190,6 @@ def main():
         
         # 1 hour workouts
         #else:
+            #workouts = []
 
 main()
