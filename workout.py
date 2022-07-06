@@ -82,13 +82,14 @@ def get_category(ids):
 
     while input_flag == False: 
         print("Enter the id for the muscle group you would like to target: ", end="")
-        response = int(input().strip())
-        
-        # validate user input
-        if response in ids:
-            input_flag = True
-        else:
-            print("Invalid input. Please try again.")
+        try:
+            response = int(input().strip())
+            if response in ids:
+                input_flag = True
+            else:
+                print("Invalid input. Please try again")
+        except:
+            print("Input is not a number, please input the id number instead.")
 
     print("")
     return response
@@ -106,17 +107,13 @@ def choose_exercise(ids):
     
     while input_flag == False:
         print("Enter the id for the exercise you would like to add: ", end="")
-        response = int(input().strip())
-
-        # validate user input
-        if response in ids:
-            input_flag = True
-        else:
-            print("Invalid input. Please try again.")
-        
-        #making sure it is a number
         try:
-            int(response)
+            response = int(input().strip())
+            # validate user input
+            if response in ids:
+                input_flag = True
+            else:
+                print("Invalid input. Please try again.")
         except:
             print("Invalid input. Please use one of the numbers displayed")
 
