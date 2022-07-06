@@ -20,7 +20,7 @@ def getInput():
         if days_per_week == 'a' or days_per_week == 'b':
             input_flag = True
         else:
-            print("Invalid input. Please try again.")
+            print("Invalid input: please enter either 'a' or 'b'.")
     input_flag = False
 
     print('How long would you like to workout?')
@@ -29,22 +29,8 @@ def getInput():
         if workout_length == 'a' or workout_length == 'b':
             input_flag = True
         else:
-            print("Invalid input. Please try again.")
+            print("Invalid input: please enter either 'a' or 'b'.")
     return (days_per_week, workout_length)
-
-#language 2 restricts it to english
-#mass req for random exercises, returns descriptions
-#returns an array of descriptions
-def mass_req():
-    r = requests.get(BASE_URL + 'exercise/?language=2', headers=headers).json()
-    results = r['results']
-
-    descriptions = []
-
-    for workout in results:
-        descriptions.append(workout['description'])
-
-    return descriptions
 
 # receives: a muscle type (UPPER/LOWER/ALL)
 # returns: a dictionary of categories in the workout type (name:id)
@@ -97,14 +83,16 @@ def get_category(ids):
 
     while input_flag == False: 
         print("Enter the id for the muscle group you would like to target: ", end="")
-        response = int(input().strip())
+        try:
+            response = int(input().strip())
         
-        # validate user input
-        if response in ids:
-            input_flag = True
-        else:
-            print("Invalid input. Please try again.")
-
+            # validate user input
+            if response in ids:
+                input_flag = True
+            else:
+                print("Invalid input: this id is not an option. Please input one from the list.")
+        except:
+            print("Invalid input: please input the id to the left of the category")
     print("")
     return response
 
@@ -121,13 +109,15 @@ def choose_exercise(ids):
     
     while input_flag == False:
         print("Enter the id for the exercise you would like to add: ", end="")
-        response = int(input().strip())
-
-        # validate user input
-        if response in ids:
-            input_flag = True
-        else:
-            print("Invalid input. Please try again.")
+        try:
+            response = int(input().strip())
+            # validate user input
+            if response in ids:
+                input_flag = True
+            else:
+                print("Invalid input: this id is not an option. Please input one from the list.")
+        except:
+            print("Invalid input: please input the id to the left of the exercise.")
     print("")
     return response
 
