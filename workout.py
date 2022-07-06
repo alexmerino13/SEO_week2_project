@@ -56,6 +56,10 @@ def get_categories(muscle_type):
         names = ["Arms","Back","Chest","Shoulders"]
     elif muscle_type == 'LOWER':
         names = ["Calves","Legs"]
+    elif muscle_type == 'BNB':
+        names = ["Arms", "Back"]
+    elif muscle_type == 'CNT':
+        names = ["Arms", "Chest"]
 
     if muscle_type == 'ALL':
         r = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers).json()['results']
@@ -141,13 +145,19 @@ def get_choices(workouts):
     upper_categories = get_categories('UPPER')
     lower_categories = get_categories('LOWER')
     all_categories = get_categories('ALL')
+    back_and_bis = get_categories('BNB')
+    chest_and_tris = get_categories('CNT')
 
     for key in workouts:
         # get upper body exercise
         if key == 'U':
+            # ask the user which category they want to target
             upper_cat = get_category(upper_categories)
+            # get all excercises in the chosen category
             upper_exercises = get_exercises(upper_cat)
+            # ask the user what exercise they want to add to workout
             upper_choice = choose_exercise(upper_exercises)
+            # add the exercise to list of choices
             choices.append(upper_choice)
         # get lower body exercise
         elif key == 'L':
@@ -161,6 +171,17 @@ def get_choices(workouts):
             accessory_exercises = get_exercises(accessory_cat)
             accessory_choice = choose_exercise(accessory_exercises)
             choices.append(accessory_choice)
+        # get back and bicep exercises
+        elif key == 'B':
+            bnb_cat = get_category(back_and_bis)
+            bnb_exercises = get_exercises(bnb_cat)
+            bnb_choice = choose_exercise(bnb_exercises)
+            choices.append(bnb_choice)
+        elif key == 'C':
+            cnt_cat = get_category(chest_and_tris)
+            cnt_exercises = get_exercises(cnt_cat)
+            cnt_choice = choose_exercise(cnt_exercises)
+            choices.append(cnt_choice)
         else:
             print("Invalid workout: workout type not an option.")
     return choices
@@ -170,7 +191,7 @@ def main():
     input = getInput()
     days_per_week = input[0]
     workout_length = input[1]
-
+    workout_days = {}
     # 3 day workout split
     if days_per_week == 'a':
         # 30 minute workouts
@@ -178,20 +199,49 @@ def main():
             # 1 upper, 1 lower, 1 accessory
             workouts = ['U', 'L','A']
             choices = get_choices(workouts)
-            print(choices)
+
+            # add 3 identical workouts with exercise choices
+            for index in range(1, 4):
+                workout_days[index] = choices
+            print(workout_days)
 
         # 1 hour workouts
         else:
             workouts = ['U','U','L','L','A']
             choices = get_choices(workouts)
-            print(choices)
+            for index in range(1, 4):
+                workout_days[index] = choices
+            print(workout_days)
+
+    option1 = [
+        ['L', 'L', 'L'],
+        ['B', 'B', 'B'],
+        ['L', 'L', 'L'],
+        ['C', 'C', 'C']
+    ]
+    option2 = [
+        ['L', 'L', 'L', 'L', 'L', 'L'],
+        ['B', 'B', 'B', 'B', 'B', 'B'],
+        ['L', 'L', 'L', 'L', 'L', 'L'],
+        ['C', 'C', 'C', 'C', 'C', 'C']
+    ]
 
     # 4 day workout split
-    #else:
+    if days_per_week == 'b':
         # 30 minute workouts
-        #if workout_length = 'a':
+        if workout_length == 'a':
+            # lower, back & bicep, lower, chest & tricep
+            for index in range(0, len(option1)):
+                    choices = get_choices(option1[index])
+                    workout_days[index+1] = choices
+            print(workout_days)
         
-        # 1 hour workouts
-        #else:
+        # 1 hour workout
+        else:
+            for index in range(0, len(option2)):
+                    choices = get_choices(option2[index])
+                    workout_days[index+1] = choices
+            print(workout_days)
+            
 
 main()
