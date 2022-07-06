@@ -4,11 +4,33 @@ import pandas as pd
 import sqlalchemy as db
 from sqlalchemy import create_engine 
 
+# This section contains relevant authentication information 
+# And base url information for the WGER api
 WGER_API_key = os.environ.get('WORKOUT_API_KEY')
-
 BASE_URL = 'https://wger.de/api/v2/'
-
 headers = {'Authorization': f'Token {WGER_API_key}', 'Content-Type': 'application/json'}
+
+def getInput():
+    # Flag for input 
+    input_flag = False
+    # Get input from the user
+    print('How many days per week would you like to workout?')
+    while input_flag is False:
+        days_per_week = input("Enter 'a' for 3 days or 'b' for 4 days: ")
+        if days_per_week == 'a' or days_per_week == 'b':
+            input_flag = True
+        else:
+            print("Invalid input. Please try again.")
+    input_flag = False
+
+    print('How long would you like to workout?')
+    while input_flag is False:
+        workout_length = input("Enter 'a' for thirty minutes or 'b' for one hour: ")
+        if workout_length == 'a' or workout_length == 'b':
+            input_flag = True
+        else:
+            print("Invalid input. Please try again.")
+    return (days_per_week, workout_length)
 
 #language 2 restricts it to english
 #mass req for random exercises, returns descriptions
@@ -24,59 +46,152 @@ def mass_req():
 
     return descriptions
 
-#creates a dictionary with the target area as the key, and id as the value
-#because I think we might be able to use the IDs? but not sure yet
-#returns a dictionary of the name:id pairs
-def get_categories():
-    r = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers).json()['results']
+# receives: a muscle type (UPPER/LOWER/ALL)
+# returns: a dictionary of categories in the workout type (name:id)
+def get_categories(muscle_type):
 
+    names = []
     categories = {}
+    if muscle_type == 'UPPER':
+        names = ["Arms","Back","Chest","Shoulders"]
+    elif muscle_type == 'LOWER':
+        names = ["Calves","Legs"]
 
-    for item in r:
-        categories[item['name'].lower()] = str(item['id'])
+    if muscle_type == 'ALL':
+        r = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers).json()['results']
+        for item in r:
+            categories[item['id']] = item['name'].lower()
+    else:
+        for group in names:
+            r = requests.get(BASE_URL + 'exercisecategory?name=' + group, headers=headers).json()['results']
+            for item in r:
+                categories[item['id']] = item['name'].lower()
     return categories
 
-#gets a list of exercises by muscle group id and prints it to console
+# receives: a muscle group id
+# returns: a dictionary of exercises in the muscle group (name:id)
 def get_exercises(id):
-    r = requests.get(BASE_URL +'exercise/?muscles=' + id + '&language=2').json()
-    print(r)
+
+    r = requests.get(BASE_URL +'exercise/?category=' + str(id) + '&language=2', headers=headers).json()['results']
+    exercises = {}
+
+    for item in r:
+        exercises[item['id']] = item['name'].lower()
+    return exercises
 
 #recieves and validates user input: prints options to console, handles response
 #by making sure it is lowercase and there is no whitespace. then it makes sure 
 #the response can be found in the options. if not, loops through until a correct
 #response is given
-def get_input(ids):
-    keys = list(ids.keys())
-    print("What do you want to target? Below is a list of options")
+def get_category(ids):
+
+    input_flag = False;
     
-    for key in keys:
-        print(key, end=" ")
+    print("What do you want to target? Below is a list of options")     
+    for key in ids:
+        print(str(key) + ': ' + ids[key])
+
+    while input_flag == False: 
+        print("Enter the id for the muscle group you would like to target: ", end="")
+        response = int(input().strip())
+        
+        # validate user input
+        if response in ids:
+            input_flag = True
+        else:
+            print("Invalid input. Please try again.")
+
     print("")
+    return response
+
+# receives: a list of exercise options
+# returns: the id chosen by the user for their exercise
+# asks the user to choose an exercise id from a list
+def choose_exercise(ids):
+    input_flag = False;
+
+    print("Which exercise would you like to add? Below is a list of options")
     
-    response = input().strip().lower()
+    for key in ids:
+        print(str(key) + ': ' + ids[key])
+    
+    while input_flag == False:
+        print("Enter the id for the exercise you would like to add: ", end="")
+        response = int(input().strip())
 
-    try:
-        return response
-    except:
-        print("Invalid input: input not an option.")
-        return get_input(ids)
+        # validate user input
+        if response in ids:
+            input_flag = True
+        else:
+            print("Invalid input. Please try again.")
+    print("")
+    return response
 
-def driver():
-    ids = get_categories()
-    input = get_input(ids)
-    get_exercises(input)
-driver()
+# receives: a list of workout groups, valid values are U (upper
+#           body), L (lower body), or A (accessory)
+# returns: a list of ids for the chosen exercises
+# for each workout type in the input list, asks the user to pick
+# a muscle group from the UPPER/LOWER/ALL options, then asks the
+# user to pick an exercise coorsponding to the category. Adds each
+# exercise id to the list of choises, which it then returns
+def get_choices(workouts):
+    choices = []
 
+    # get categories for different splits
+    upper_categories = get_categories('UPPER')
+    lower_categories = get_categories('LOWER')
+    all_categories = get_categories('ALL')
 
-# Alex's code test
-r = requests.get(BASE_URL + 'exerciseinfo/345/', headers=headers)
+    for key in workouts:
+        # get upper body exercise
+        if key == 'U':
+            upper_cat = get_category(upper_categories)
+            upper_exercises = get_exercises(upper_cat)
+            upper_choice = choose_exercise(upper_exercises)
+            choices.append(upper_choice)
+        # get lower body exercise
+        elif key == 'L':
+            lower_cat = get_category(lower_categories)
+            lower_exercises = get_exercises(lower_cat)
+            lower_choice = choose_exercise(lower_exercises)
+            choices.append(lower_choice)
+        # get accessory exercise
+        elif key == 'A':
+            accessory_cat = get_category(all_categories)
+            accessory_exercises = get_exercises(accessory_cat)
+            accessory_choice = choose_exercise(accessory_exercises)
+            choices.append(accessory_choice)
+        else:
+            print("Invalid workout: workout type not an option.")
+    return choices
 
-exercise = r.json()
-name = exercise["name"] 
-category = exercise["category"]["name"]
+def main():
+    #get user input
+    input = getInput()
+    days_per_week = input[0]
+    workout_length = input[1]
 
-print("name: " + name + " category: " + category)
+    # 3 day workout split
+    if days_per_week == 'a':
+        # 30 minute workouts
+        if workout_length == 'a':
+            # 1 upper, 1 lower, 1 accessory
+            workouts = ['U', 'L','A']
+            choices = get_choices(workouts)
+            print(choices)
 
-# category_request = requests.get(BASE_URL + 'exercisecategory?language=2', headers=headers)
-# print(category_request.json())
-# new line of code
+        # 1 hour workouts
+        else:
+            workouts = ['U','U','L','L','A']
+            choices = get_choices(workouts)
+            print(choices)
+
+    # 4 day workout split
+    #else:
+        # 30 minute workouts
+        #if workout_length = 'a':
+        
+        # 1 hour workouts
+        #else:
+
+main()
