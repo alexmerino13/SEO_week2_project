@@ -19,9 +19,9 @@ user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [],
                       "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [],
-        "session_dow": []}
+                 "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [],
-        "exercise_id": [], "exercise_name": []}
+                   "exercise_id": [], "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
 panda_data_frame.to_sql('workout_users', con=engine, if_exists='append',
                         index=False)
@@ -41,7 +41,7 @@ four_day = {1: 'Mon', 2: 'Tues', 3: 'Thurs', 4: 'Fri'}
 
 
 def getUsername():
-    # Flag for input 
+    # Flag for input
     input_flag = False
     # Get input from the user
     while input_flag is False:
@@ -59,16 +59,20 @@ def getUsername():
             input_flag = True
         else:
             while user_flag is False:
-                print("Username not found. Would you like to create a new user?")
-                create_new = input("Enter 'Y' for Yes or 'N' to try again: ")
+                print("""Username not found. Would 
+                        you like to create a new user?""")
+                create_new = input("""Enter 'Y' for Yes 
+                                    or 'N' to try again: """)
                 if create_new.upper() == 'Y':
                     user_flag = True
                     input_flag = True
                     # create new user
                     first_name = input("Enter your first name: ")
-                    user_dict = {"username": [username], "first_name": [first_name]}
+                    user_dict = {"username": [username],
+                                 "first_name": [first_name]}
                     panda_data_frame = pd.DataFrame.from_dict(user_dict)
-                    panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
+                    panda_data_frame.to_sql('workout_users', con=engine,
+                                            if_exists='append', index=False)
                 elif create_new.upper() == 'N':
                     user_flag = True
                 else:
@@ -78,7 +82,8 @@ def getUsername():
 
 
 def displayMenu(username):
-    query_user = "SELECT first_name FROM workout_users WHERE username = '" + username + "';"
+    query_user = """SELECT first_name FROM workout_users 
+                    WHERE username = '" + username + "';"""
     query_result = engine.execute(query_user).fetchall()[0][0]
     print(f"""Welcome, {query_result} please chooose from the following options:\n
     1 - Add new workout\n
