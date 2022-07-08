@@ -8,7 +8,8 @@ from datetime import date
 # And base url information for the WGER api
 WGER_API_key = os.environ.get('WORKOUT_API_KEY')
 BASE_URL = 'https://wger.de/api/v2/'
-headers = {'Authorization': f'Token {WGER_API_key}', 'Content-Type': 'application/json'}
+headers = {'Authorization': f'Token {WGER_API_key}', 
+        'Content-Type': 'application/json'}
 
 # The follow section contains various static elements
 # This is a section comment 
@@ -18,7 +19,7 @@ user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [], "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [], "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
-        "exercise_name":[]}
+        "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
 panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
@@ -109,10 +110,10 @@ def getInput():
             print("Invalid input: please enter either 'a' or 'b'.")
     return (days_per_week, workout_length)
 
+
 # receives: a muscle type (UPPER/LOWER/ALL)
 # returns: a dictionary of categories in the workout type (name:id)
 def get_categories(muscle_type):
-
     names = []
     categories = {}
     if muscle_type == 'UPPER':
@@ -146,10 +147,10 @@ def get_exercises(id):
         exercises[item['id']] = item['name'].lower()
     return exercises
 
-#recieves and validates user input: prints options to console, handles response
-#by making sure it is lowercase and there is no whitespace. then it makes sure 
-#the response can be found in the options. if not, loops through until a correct
-#response is given
+# recieves and validates user input: prints options to console, handles response
+# by making sure it is lowercase and there is no whitespace. then it makes sure 
+# the response can be found in the options. if not, loops through until a correct
+# response is given
 def get_category(ids):
 
     input_flag = False
@@ -162,7 +163,6 @@ def get_category(ids):
         print("Enter the id for the muscle group you would like to target: ", end="")
         try:
             response = int(input().strip())
-        
             # validate user input
             if response in ids:
                 input_flag = True
