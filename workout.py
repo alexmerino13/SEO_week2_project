@@ -12,13 +12,14 @@ headers = {'Authorization': f'Token {WGER_API_key}',
         'Content-Type': 'application/json'}
 
 # The follow section contains various static elements
-# This is a section comment 
+# This is a section comment
 # This is a section comment
 engine = db.create_engine('sqlite:///workouts.db')
 user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [],
                     "workout_name": [], "date_created": []}
-session_table = {"username": [], "workout_id": [], "session_id": [], "session_dow": []}
+session_table = {"username": [], "workout_id": [], "session_id": [], 
+        "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
         "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
@@ -120,7 +121,7 @@ def get_categories(muscle_type):
     if muscle_type == 'UPPER':
         names = ["Arms", "Back", "Chest", "Shoulders"]
     elif muscle_type == 'LOWER':
-        names = ["Calves","Legs"]
+        names = ["Calves", "Legs"]
     elif muscle_type == 'BNB':
         names = ["Arms", "Back"]
     elif muscle_type == 'CNT':
@@ -171,7 +172,6 @@ def get_category(ids):
             else:
                 print("Invalid input: this id is not an option. Please input one from the list.")
         except ValueError:
-            # TODO: Error (bare except)
             print("Invalid input: please input the id to the left of the category")
     print("")
     return response
@@ -187,7 +187,7 @@ def choose_exercise(ids):
 
     for key in ids:
         print(str(key) + ': ' + ids[key])
-    
+
     while input_flag is False:
         print("Enter the id for the exercise you would like to add: ", end="")
         try:
@@ -401,7 +401,7 @@ def updateWorkout(workout_id, username):
 
 
 def main():
-    #get user input
+    # get user input
     username = getUsername()
     display_choice = displayMenu(username)
 
