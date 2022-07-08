@@ -18,7 +18,7 @@ user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [], "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [], "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
-    "exercise_name":[]}
+        "exercise_name":[]}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
 panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
@@ -67,6 +67,7 @@ def getUsername():
                     print("Invalid input. Please try again.")
 
     return username
+
 
 def displayMenu(username):
     query_user = "SELECT first_name FROM workout_users WHERE username = '" + username + "';"
@@ -166,7 +167,8 @@ def get_category(ids):
                 input_flag = True
             else:
                 print("Invalid input: this id is not an option. Please input one from the list.")
-        except: #TODO: Error (bare except)
+        except: 
+            # TODO: Error (bare except)
             print("Invalid input: please input the id to the left of the category")
     print("")
     return response
@@ -175,14 +177,14 @@ def get_category(ids):
 # returns: the id chosen by the user for their exercise
 # asks the user to choose an exercise id from a list
 def choose_exercise(ids):
-    input_flag = False;
+    input_flag = False
 
     print("Which exercise would you like to add? Below is a list of options")
     
     for key in ids:
         print(str(key) + ': ' + ids[key])
     
-    while input_flag == False:
+    while input_flag is False:
         print("Enter the id for the exercise you would like to add: ", end="")
         try:
             response = int(input().strip())
@@ -384,7 +386,7 @@ def displayUpdateWorkout(username):
 
 def updateWorkout(workout_id, username):
     new_name = input("Enter the new workout name: ")
-    update_workouts = "UPDATE workout_plan SET workout_name ='" + str(new_name) + "' WHERE username='"+ str(username) +"' AND workout_id=" + str(workout_id) +";"
+    update_workouts = "UPDATE workout_plan SET workout_name ='" + str(new_name) + "' WHERE username='" + str(username) + "' AND workout_id=" + str(workout_id) + ";"
     query_result = engine.execute(update_workouts)
 
 def main():
@@ -405,4 +407,6 @@ def main():
     #query_result = engine.execute(query_plan).fetchall()  
     #print(query_result)
 
+
 main()
+
