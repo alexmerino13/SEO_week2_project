@@ -1,8 +1,6 @@
 # Plan My Workout: SEO Week 2 Project
 
-![CheckStyle](https://github.com/alexmerino13/SEO_week2_project/actions/workflows/checkstyle.yml/badge.svg)
-
-![Testing](https://github.com/alexmerino13/SEO_week2_project/actions/workflows/test.yml/badge.svg)
+![CheckStyle](https://github.com/alexmerino13/SEO_week2_project/actions/workflows/checkstyle.yml/badge.svg) ![Testing](https://github.com/alexmerino13/SEO_week2_project/actions/workflows/test.yml/badge.svg)
 
 ## Overview
 We all know the gym can be an intimidating place- especially to a beginner. Our goal is to eliminate any apprehension you may have when going to the gym!
