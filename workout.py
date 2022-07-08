@@ -4,7 +4,7 @@ import pandas as pd
 import sqlalchemy as db
 from datetime import date
 
-# This section contains relevant authentication information 
+# This section contains relevant authentication information
 # And base url information for the WGER api
 WGER_API_key = os.environ.get('WORKOUT_API_KEY')
 BASE_URL = 'https://wger.de/api/v2/'
@@ -18,7 +18,7 @@ user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [], "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [], "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
-                    "exercise_name":[]}
+    "exercise_name":[]}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
 panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
@@ -31,6 +31,7 @@ panda_data_frame.to_sql('exercises', con=engine, if_exists='append', index=False
 # dictionaries for session day of week
 three_day = {1: 'Mon', 2: 'Wed', 3: 'Fri'}
 four_day = {1: 'Mon', 2: 'Tues', 3: 'Thurs', 4: 'Fri'}
+
 
 def getUsername():
     # Flag for input 
@@ -136,7 +137,7 @@ def get_categories(muscle_type):
 # returns: a dictionary of exercises in the muscle group (name:id)
 def get_exercises(id):
 
-    r = requests.get(BASE_URL +'exercise/?category=' + str(id) + '&language=2', headers=headers).json()['results']
+    r = requests.get(BASE_URL + 'exercise/?category=' + str(id) + '&language=2', headers=headers).json()['results']
     exercises = {}
 
     for item in r:
@@ -149,13 +150,13 @@ def get_exercises(id):
 #response is given
 def get_category(ids):
 
-    input_flag = False;
+    input_flag = False
     
     print("What do you want to target? Below is a list of options")     
     for key in ids:
         print(str(key) + ': ' + ids[key])
 
-    while input_flag == False: 
+    while input_flag is False: 
         print("Enter the id for the muscle group you would like to target: ", end="")
         try:
             response = int(input().strip())
@@ -165,7 +166,7 @@ def get_category(ids):
                 input_flag = True
             else:
                 print("Invalid input: this id is not an option. Please input one from the list.")
-        except:
+        except: #TODO: Error (bare except)
             print("Invalid input: please input the id to the left of the category")
     print("")
     return response
@@ -309,15 +310,15 @@ def addNewWorkout(username):
         if workout_length == 'a':
             # lower, back & bicep, lower, chest & tricep
             for index in range(0, len(option1)):
-                    choices = get_choices(option1[index])
-                    workout_days[index+1] = choices
+                choices = get_choices(option1[index])
+                workout_days[index+1] = choices
             print(workout_days)
         
         # 1 hour workout
         else:
             for index in range(0, len(option2)):
-                    choices = get_choices(option2[index])
-                    workout_days[index+1] = choices
+                choices = get_choices(option2[index])
+                workout_days[index+1] = choices
             print(workout_days)
     workout_name = getWorkoutName()
     current_date = date.today()
