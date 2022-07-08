@@ -56,7 +56,7 @@ def getUsername():
                 if create_new.upper() == 'Y':
                     user_flag = True
                     input_flag = True
-                    #create new user
+                    # create new user
                     first_name = input("Enter your first name: ")
                     user_dict = {"username": [username], "first_name": [first_name]}
                     panda_data_frame = pd.DataFrame.from_dict(user_dict)
@@ -85,6 +85,7 @@ def displayMenu(username):
         else:
             print("Please try again.")
     return choice
+
 
 def getInput():
     # Flag for input 
@@ -152,7 +153,7 @@ def get_exercises(id):
 def get_category(ids):
 
     input_flag = False
-    
+
     print("What do you want to target? Below is a list of options")     
     for key in ids:
         print(str(key) + ': ' + ids[key])
@@ -409,4 +410,3 @@ def main():
 
 
 main()
-
