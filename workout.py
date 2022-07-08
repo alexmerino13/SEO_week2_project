@@ -62,7 +62,8 @@ def getUsername():
                 username_not_found = "Username not found."
                 username_not_found += "Would you like to create a new user?"
                 print(username_not_found)
-                create_new = input("""Enter 'Y' for Yes or 'N' to try again: """)
+                prompt_create = "Enter 'Y' for yes or 'N' to try again: "
+                create_new = input(prompt_create)
                 if create_new.upper() == 'Y':
                     user_flag = True
                     input_flag = True
@@ -101,7 +102,7 @@ def displayMenu(username):
 
 
 def getInput():
-    # Flag for input 
+    # Flag for input
     input_flag = False
     # Get input from the user
     print('How many days per week would you like to workout?')
@@ -411,7 +412,7 @@ def updateWorkout(workout_id, username):
     query_result = engine.execute(update_workouts)
 
 
-def main():
+def start():
     # get user input
     username = getUsername()
     display_choice = displayMenu(username)
@@ -429,4 +430,4 @@ def main():
     # print(query_result)
 
 
-main()
+start()
