@@ -9,7 +9,7 @@ from datetime import date
 WGER_API_key = os.environ.get('WORKOUT_API_KEY')
 BASE_URL = 'https://wger.de/api/v2/'
 headers = {'Authorization': f'Token {WGER_API_key}',
-        'Content-Type': 'application/json'}
+           'Content-Type': 'application/json'}
 
 # The follow section contains various static elements
 # This is a section comment
@@ -20,17 +20,20 @@ workout_plan_table = {"username": [], "workout_id": [],
                     "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [],
         "session_dow": []}
-exercises_table = {"username": [], "workout_id": [], "session_id": [], 
+exercises_table = {"username": [], "workout_id": [], "session_id": [],
         "exercise_id": [], "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
-panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', 
+panda_data_frame.to_sql('workout_users', con=engine, if_exists='append',
                         index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
-panda_data_frame.to_sql('workout_plan', con=engine, if_exists='append', index=False)
+panda_data_frame.to_sql('workout_plan', con=engine, if_exists='append',
+                        index=False)
 panda_data_frame = pd.DataFrame.from_dict(session_table)
-panda_data_frame.to_sql('sessions', con=engine, if_exists='append', index=False)
+panda_data_frame.to_sql('sessions', con=engine, if_exists='append',
+                        index=False)
 panda_data_frame = pd.DataFrame.from_dict(exercises_table)
-panda_data_frame.to_sql('exercises', con=engine, if_exists='append', index=False)
+panda_data_frame.to_sql('exercises', con=engine, if_exists='append',
+                        index=False)
 
 # dictionaries for session day of week
 three_day = {1: 'Mon', 2: 'Wed', 3: 'Fri'}

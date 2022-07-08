@@ -22,7 +22,7 @@ class TestFileName(unittest.TestCase):
 
         all = get_categories("ALL")
         compare_all = {10: "abs", 8: "arms", 12: "back", 14: "calves",
-                        11: "chest", 9: "legs", 13: "shoulders"}
+                       11: "chest", 9: "legs", 13: "shoulders"}
         self.assertEqual(all, compare_all)
 
         bnb = get_categories("BNB")
