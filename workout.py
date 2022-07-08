@@ -18,10 +18,10 @@ engine = db.create_engine('sqlite:///workouts.db')
 user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [],
                     "workout_name": [], "date_created": []}
-session_table = {"username": [], "workout_id": [], "session_id": [], 
+session_table = {"username": [], "workout_id": [], "session_id": [],
         "session_dow": []}
-exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
-        "exercise_name": []}
+exercises_table = {"username": [], "workout_id": [], "session_id": [], 
+        "exercise_id": [], "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
 panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
@@ -285,7 +285,7 @@ def addNewWorkout(username):
         # 30 minute workouts
         if workout_length == 'a':
             # 1 upper, 1 lower, 1 accessory
-            workouts = ['U', 'L','A']
+            workouts = ['U', 'L', 'A']
             choices = get_choices(workouts)
 
             # add 3 identical workouts with exercise choices
@@ -323,7 +323,7 @@ def addNewWorkout(username):
                 choices = get_choices(option1[index])
                 workout_days[index+1] = choices
             print(workout_days)
-        
+
         # 1 hour workout
         else:
             for index in range(0, len(option2)):
@@ -413,9 +413,9 @@ def main():
     else:
         print("Invalid menu selection.")
 
-    #query_plan = "SELECT * FROM workout_plan;"
-    #query_result = engine.execute(query_plan).fetchall()  
-    #print(query_result)
+    # query_plan = "SELECT * FROM workout_plan;"
+    # query_result = engine.execute(query_plan).fetchall()  
+    # print(query_result)
 
 
 main()
