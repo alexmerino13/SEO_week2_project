@@ -8,7 +8,7 @@ from datetime import date
 # And base url information for the WGER api
 WGER_API_key = os.environ.get('WORKOUT_API_KEY')
 BASE_URL = 'https://wger.de/api/v2/'
-headers = {'Authorization': f'Token {WGER_API_key}', 
+headers = {'Authorization': f'Token {WGER_API_key}',
         'Content-Type': 'application/json'}
 
 # The follow section contains various static elements
@@ -16,7 +16,8 @@ headers = {'Authorization': f'Token {WGER_API_key}',
 # This is a section comment
 engine = db.create_engine('sqlite:///workouts.db')
 user_table = {"username": [], "first_name": []}
-workout_plan_table = {"username": [], "workout_id": [], "workout_name": [], "date_created": []}
+workout_plan_table = {"username": [], "workout_id": [],
+                    "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [], "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [], "exercise_id": [],
         "exercise_name": []}
@@ -117,7 +118,7 @@ def get_categories(muscle_type):
     names = []
     categories = {}
     if muscle_type == 'UPPER':
-        names = ["Arms","Back","Chest","Shoulders"]
+        names = ["Arms", "Back", "Chest", "Shoulders"]
     elif muscle_type == 'LOWER':
         names = ["Calves","Legs"]
     elif muscle_type == 'BNB':
@@ -136,16 +137,17 @@ def get_categories(muscle_type):
                 categories[item['id']] = item['name'].lower()
     return categories
 
+
 # receives: a muscle group id
 # returns: a dictionary of exercises in the muscle group (name:id)
 def get_exercises(id):
-
     r = requests.get(BASE_URL + 'exercise/?category=' + str(id) + '&language=2', headers=headers).json()['results']
     exercises = {}
 
     for item in r:
         exercises[item['id']] = item['name'].lower()
     return exercises
+
 
 # recieves and validates user input: prints options to console, handles response
 # by making sure it is lowercase and there is no whitespace. then it makes sure 
@@ -168,11 +170,12 @@ def get_category(ids):
                 input_flag = True
             else:
                 print("Invalid input: this id is not an option. Please input one from the list.")
-        except: 
+        except ValueError:
             # TODO: Error (bare except)
             print("Invalid input: please input the id to the left of the category")
     print("")
     return response
+
 
 # receives: a list of exercise options
 # returns: the id chosen by the user for their exercise
@@ -181,7 +184,7 @@ def choose_exercise(ids):
     input_flag = False
 
     print("Which exercise would you like to add? Below is a list of options")
-    
+
     for key in ids:
         print(str(key) + ': ' + ids[key])
     
@@ -194,10 +197,11 @@ def choose_exercise(ids):
                 input_flag = True
             else:
                 print("Invalid input: this id is not an option. Please input one from the list.")
-        except:
+        except ValueError:
             print("Invalid input: please input the id to the left of the exercise.")
     print("")
     return response
+
 
 # receives: a list of workout groups, valid values are U (upper
 #           body), L (lower body), B (back and biceps), C (chest and triceps),
@@ -255,18 +259,21 @@ def get_choices(workouts):
         else:
             print("Invalid workout: workout type not an option.")
     return choices
-    
+
+
 # method to ask the user what they would like to name their workout
 def getWorkoutName():
     workout_name = input("What would you like to name this workout? ")
     return workout_name
-    
+
+
 # method to get the name of an exercise when passed the exercise id
 def getExercise(exercise_id):
     r = requests.get(BASE_URL + 'exerciseinfo/' + str(exercise_id), headers=headers)
     exercise = r.json()
     name = exercise["name"]
     return name 
+
 
 def addNewWorkout(username):
     input = getInput()
@@ -368,9 +375,10 @@ def addNewWorkout(username):
             exercise_obj["session_id"] = [val]
             exercise_obj["exercise_id"] = [exercise_id]
             exercise_obj["exercise_name"] = [exercise_name]
-            #add exercise object to data frame
+            # add exercise object to data frame
             panda_data_frame = pd.DataFrame.from_dict(exercise_obj)
             panda_data_frame.to_sql('exercises', con=engine, if_exists='append', index=False)
+
 
 def displayUpdateWorkout(username):
     print("Here is a list of available workouts to update:")
@@ -385,13 +393,14 @@ def displayUpdateWorkout(username):
     choice = int(input("Enter the ID for the workout you would like to update: "))
     return choice
 
+
 def updateWorkout(workout_id, username):
     new_name = input("Enter the new workout name: ")
     update_workouts = "UPDATE workout_plan SET workout_name ='" + str(new_name) + "' WHERE username='" + str(username) + "' AND workout_id=" + str(workout_id) + ";"
     query_result = engine.execute(update_workouts)
 
+
 def main():
-    
     #get user input
     username = getUsername()
     display_choice = displayMenu(username)

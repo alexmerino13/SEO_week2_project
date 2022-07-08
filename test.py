@@ -10,7 +10,7 @@ from workout import get_choices
 class TestFileName(unittest.TestCase):
     def test_get_categories_return_type(self):
         self.assertIsInstance(get_categories("UPPER"),
-                            dict, "Is not dictionary")
+                                dict, "Is not dictionary")
 
     def test_get_categories_for_valid_response(self):
         upper = get_categories("UPPER")
