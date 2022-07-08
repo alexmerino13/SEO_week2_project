@@ -59,10 +59,10 @@ def getUsername():
             input_flag = True
         else:
             while user_flag is False:
-                print("""Username not found. Would 
-                        you like to create a new user?""")
-                create_new = input("""Enter 'Y' for Yes 
-                                    or 'N' to try again: """)
+                username_not_found = "Username not found."
+                username_not_found += "Would you like to create a new user?"
+                print(username_not_found)
+                create_new = input("""Enter 'Y' for Yes or 'N' to try again: """)
                 if create_new.upper() == 'Y':
                     user_flag = True
                     input_flag = True
@@ -82,8 +82,8 @@ def getUsername():
 
 
 def displayMenu(username):
-    query_user = """SELECT first_name FROM workout_users 
-                    WHERE username = '" + username + "';"""
+    query_user = "SELECT first_name FROM workout_users WHERE username = '"
+    query_user += username + "';"
     query_result = engine.execute(query_user).fetchall()[0][0]
     print(f"""Welcome, {query_result} please chooose from the following options:\n
     1 - Add new workout\n
@@ -393,7 +393,8 @@ def addNewWorkout(username):
 def displayUpdateWorkout(username):
     print("Here is a list of available workouts to update:")
     # get all workout plans for this user
-    query_workouts = "SELECT * FROM workout_plan WHERE username = '" + username + "';"
+    query_workouts = "SELECT * FROM workout_plan WHERE username = '"
+    query_workouts += username + "';"
     query_result = engine.execute(query_workouts).fetchall()
 
     for workout in query_result:
