@@ -17,7 +17,7 @@ headers = {'Authorization': f'Token {WGER_API_key}',
 engine = db.create_engine('sqlite:///workouts.db')
 user_table = {"username": [], "first_name": []}
 workout_plan_table = {"username": [], "workout_id": [],
-                    "workout_name": [], "date_created": []}
+                      "workout_name": [], "date_created": []}
 session_table = {"username": [], "workout_id": [], "session_id": [],
         "session_dow": []}
 exercises_table = {"username": [], "workout_id": [], "session_id": [],
@@ -47,7 +47,8 @@ def getUsername():
     while input_flag is False:
         user_flag = False
         username = input("Enter your username to begin: ")
-        query_user = "SELECT username FROM workout_users WHERE username='" + username + "';"
+        query_user = "SELECT username FROM workout_users WHERE username='"
+        query_user += username + "';"
         query_result = engine.execute(query_user).fetchall()
         if len(query_result) == 0:
             found_name = ''
