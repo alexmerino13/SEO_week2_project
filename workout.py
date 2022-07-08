@@ -23,7 +23,8 @@ session_table = {"username": [], "workout_id": [], "session_id": [],
 exercises_table = {"username": [], "workout_id": [], "session_id": [], 
         "exercise_id": [], "exercise_name": []}
 panda_data_frame = pd.DataFrame.from_dict(user_table)
-panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', index=False)
+panda_data_frame.to_sql('workout_users', con=engine, if_exists='append', 
+                        index=False)
 panda_data_frame = pd.DataFrame.from_dict(workout_plan_table)
 panda_data_frame.to_sql('workout_plan', con=engine, if_exists='append', index=False)
 panda_data_frame = pd.DataFrame.from_dict(session_table)
@@ -295,7 +296,7 @@ def addNewWorkout(username):
 
         # 1 hour workouts
         else:
-            workouts = ['U','U','L','L','A']
+            workouts = ['U', 'U', 'L', 'L', 'A']
             choices = get_choices(workouts)
             for index in range(1, 4):
                 workout_days[index] = choices

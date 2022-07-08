@@ -9,8 +9,7 @@ from workout import get_choices
 
 class TestFileName(unittest.TestCase):
     def test_get_categories_return_type(self):
-        self.assertIsInstance(get_categories("UPPER"),
-                                dict, "Is not dictionary")
+        self.assertIsInstance(get_categories("UPPER"), dict)
 
     def test_get_categories_for_valid_response(self):
         upper = get_categories("UPPER")
@@ -22,8 +21,8 @@ class TestFileName(unittest.TestCase):
         self.assertEqual(lower, compare_lower)
 
         all = get_categories("ALL")
-        compare_all = {10: "abs", 8: "arms", 12: "back", 14: "calves", 
-                    11: "chest", 9: "legs", 13: "shoulders"}
+        compare_all = {10: "abs", 8: "arms", 12: "back", 14: "calves",
+                        11: "chest", 9: "legs", 13: "shoulders"}
         self.assertEqual(all, compare_all)
 
         bnb = get_categories("BNB")
